@@ -3,18 +3,16 @@ package main
 import (
 	"fmt"
 
-	"github.com/seyhak/parliament/types"
-
 	logic "github.com/seyhak/parliament/logic"
+	logic_types "github.com/seyhak/parliament/logic/types"
 )
 
 func main() {
 	fmt.Println("Welcome to parliament!")
-
-	fmt.Println("!")
+	logic.InitiateState(nil)
 	user := logic.CreateUser()
 	fmt.Println(user.Name)
 
-	users := []types.User{user}
+	users := []logic_types.User{user}
 	logic.RunParliament(&users)
 }

@@ -1,4 +1,4 @@
-package types
+package logic_types
 
 type User struct {
 	Name  string

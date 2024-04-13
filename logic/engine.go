@@ -1,11 +1,17 @@
 package logic
 
-import "github.com/seyhak/parliament/types"
+import (
+	"fmt"
 
-func loadProblems() {
+	logic_types "github.com/seyhak/parliament/logic/types"
+)
 
+func checkResult() {
+	fmt.Println(GetGlobalState().ProblemState.votes)
 }
 
-func RunParliament(*[]types.User) {
-	loadProblems()
+func RunParliament(users *[]logic_types.User) {
+	handleProblems()
+	// TODO
+	checkResult()
 }
