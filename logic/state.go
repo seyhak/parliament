@@ -1,5 +1,10 @@
 package logic
 
+import (
+	"encoding/json"
+	"log"
+)
+
 // TODO create config file
 const ConfigMaxChoicesSize = 6
 
@@ -7,9 +12,9 @@ type UserState struct {
 	SkipUser bool
 }
 
-type votes = map[string][]int
+type Votes = map[string][]int
 type ProblemState struct {
-	votes map[string][]int // key is uuid of a problem, second is array of votes per answer
+	Votes map[string][]int // key is uuid of a problem, second is array of Votes per answer
 }
 
 type State struct {
@@ -22,7 +27,7 @@ var defaultUserState = UserState{
 }
 
 var defaultProblemState = ProblemState{
-	votes: make(votes),
+	Votes: make(Votes),
 }
 
 var defaultState = State{
@@ -37,7 +42,15 @@ func InitiateState(state *State) *State {
 		globalState = state
 		return globalState
 	}
-	globalState = &defaultState
+	data, _ := json.Marshal(defaultState)
+
+	var newState State
+	err := json.Unmarshal(data, &newState)
+	if err != nil {
+		log.Println("error copying state")
+	}
+
+	globalState = &newState
 	return globalState
 }
 
@@ -46,9 +59,9 @@ func GetGlobalState() *State {
 }
 
 func (state *State) updateAnswerState(key string, answerIndex int) {
-	if state.ProblemState.votes[key] == nil {
-		state.ProblemState.votes[key] = make([]int, ConfigMaxChoicesSize)
+	modifiedIdx := answerIndex - 1
+	if state.ProblemState.Votes[key] == nil {
+		state.ProblemState.Votes[key] = make([]int, ConfigMaxChoicesSize)
 	}
-	// prevValue := state.ProblemState.votes[key][answerIndex]
-	state.ProblemState.votes[key][answerIndex]++
+	state.ProblemState.Votes[key][modifiedIdx]++
 }

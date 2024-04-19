@@ -7,7 +7,8 @@ import (
 )
 
 func checkResult() {
-	fmt.Println(GetGlobalState().ProblemState.votes)
+	fmt.Println("---result---")
+	fmt.Println(GetGlobalState().ProblemState.Votes)
 }
 
 func RunParliament(users *[]logic_types.User) {
