@@ -119,6 +119,7 @@ func processProblem(file fs.FileInfo) {
 	problem := constructProblemFromFile(absDir)
 	problem.presentProblem()
 	problem.processAnswer()
+	GetGlobalState().addProblemToHistory(problem)
 }
 
 func handleProblems() {

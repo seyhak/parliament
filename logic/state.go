@@ -8,13 +8,17 @@ import (
 // TODO create config file
 const ConfigMaxChoicesSize = 6
 
+// TODO
+const ConfigMaxProblemsSize = 100
+
 type UserState struct {
 	SkipUser bool
 }
 
 type Votes = map[string][]int
 type ProblemState struct {
-	Votes map[string][]int // key is uuid of a problem, second is array of Votes per answer
+	HistoryProblems map[string]Problem // key is uuid of a problem, second is Problem
+	Votes           map[string][]int   // key is uuid of a problem, second is array of Votes per answer
 }
 
 type State struct {
@@ -27,7 +31,8 @@ var defaultUserState = UserState{
 }
 
 var defaultProblemState = ProblemState{
-	Votes: make(Votes),
+	HistoryProblems: make(map[string]Problem),
+	Votes:           make(Votes),
 }
 
 var defaultState = State{
@@ -64,4 +69,14 @@ func (state *State) updateAnswerState(key string, answerIndex int) {
 		state.ProblemState.Votes[key] = make([]int, ConfigMaxChoicesSize)
 	}
 	state.ProblemState.Votes[key][modifiedIdx]++
+}
+
+func (state *State) addProblemToHistory(problem Problem) {
+	data, err := json.Marshal(problem)
+	if err != nil {
+		log.Println("Cannot copy Problem")
+	}
+	var copiedProblem Problem
+	json.Unmarshal(data, &copiedProblem)
+	state.ProblemState.HistoryProblems[copiedProblem.Id] = copiedProblem
 }
